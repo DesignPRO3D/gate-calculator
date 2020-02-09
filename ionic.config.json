@@ -1,0 +1,7 @@
+{
+  "name": "gate-calculator",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

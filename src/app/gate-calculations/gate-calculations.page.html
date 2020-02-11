@@ -1,0 +1,152 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Gate Calculator</ion-title>
+    <ion-buttons slot="end" *ngIf="stairSegment == 'calc'">
+      <ion-button (click)="onToggleDrawings()" fill="outline">
+        {{ toggleDrawings ? 'Hide Drawing' : 'Show Drawing' }}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size="12" size-md="10" offset-md="1" size-lg="8" offset-lg="2">
+
+        <div [ngSwitch]="stairSegment"> 
+
+          <div *ngSwitchCase="'calc'">
+
+            <ion-slides pager="true" [options]="slideOpts" *ngIf="toggleDrawings">
+              <ion-slide>
+                <div class="img-main">
+                  <img src="/assets/images/gate-1.png" alt="Main Gates">
+                </div>
+              </ion-slide>
+              <ion-slide>
+                <div class="img-main">
+                  <img src="/assets/images/gate-2.png" alt="Gate Detail">
+                </div>
+              </ion-slide>
+            </ion-slides>
+
+            <ion-grid fixed class="ion-no-margin">
+              <ion-row>
+                <ion-col size="12" size-md="8" offset-md="2">
+                  <ion-item lines="none">
+                    <ion-label position="inline" color="medium">Width:</ion-label>
+                    <ion-input type="number" [(ngModel)]="_gateWidth" autofocus (ionChange)="onCalculateData()"></ion-input>
+                  </ion-item>
+                  <ion-item lines="none">
+                    <ion-label position="inline" color="medium">Post D:</ion-label>
+                    <ion-input type="number" [(ngModel)]="_postDiam" (ionChange)="onCalculateData()"></ion-input>
+                  </ion-item>
+                  <ion-item lines="none">
+                    <ion-label position="inline" color="medium">Gap B:</ion-label>
+                    <ion-input type="number" [(ngModel)]="_gapB" (ionChange)="onCalculateData()"></ion-input>
+                  </ion-item>
+                  <ion-item lines="none">
+                    <ion-label position="inline" color="medium">D:</ion-label>
+                    <ion-input type="number" [(ngModel)]="_D" (ionChange)="onCalculateData()"></ion-input>
+                  </ion-item>
+                  <ion-item lines="none">
+                    <ion-label position="inline" color="medium">Bar D:</ion-label>
+                    <ion-input type="number" [(ngModel)]="_barDiam" (ionChange)="onCalculateData()"></ion-input>
+                  </ion-item>
+                  <ion-item>
+                    <ion-label position="inline" color="medium">Bars Number:</ion-label>
+                    <ion-input type="number" [(ngModel)]="_barsNum" (ionChange)="onCalculateData()"></ion-input>
+                  </ion-item>
+
+                  <ion-item lines="none">
+                    <ion-label class="label-result" position="inline" color="medium">Width B:</ion-label>
+                    <ion-input class="input-result" type="number" disabled="true" [(ngModel)]="_widthB"></ion-input>
+                  </ion-item>
+
+                  <ion-item lines="none">
+                    <ion-label class="label-result" position="inline" color="medium">Gap:</ion-label>
+                    <ion-input class="input-result" type="number" disabled="true" [(ngModel)]="_gap"></ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row *ngIf="btnClearStorage">
+                <ion-col size="12" class="ion-text-center">
+                  <ion-button (click)="onResetForm()" color="danger" fill="outline">
+                    Clear Form
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+          </div>
+
+          <div *ngSwitchCase="'bar'">
+
+            <ion-item>
+              <ion-item>
+                <ion-label>{{  toggleBars ? 'Gate with dog bars' : 'Gate without dog bars' }}</ion-label>
+                <ion-toggle [(ngModel)]="toggleBars"></ion-toggle>
+              </ion-item>
+            </ion-item>
+
+            <ion-item lines="none">
+              <ion-label class="label-result" position="inline" color="medium">Bar Length:</ion-label>
+              <ion-input class="input-result" type="number" disabled="true" [(ngModel)]="_barLength"></ion-input>
+            </ion-item>
+            
+
+            <div class="img-main" *ngIf="toggleBars">
+              <img src="/assets/images/gate-3.png" alt="Stair Steepness">
+            </div>
+
+            <div class="img-main" *ngIf="!toggleBars">
+              <img src="/assets/images/gate-4.png" alt="Stair Steepness">
+            </div>
+
+            <ion-card *ngIf="_gap">
+              <ion-card-header>
+                <ion-card-subtitle>Start Points</ion-card-subtitle>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-list *ngIf="toggleBars">
+                  <ion-item
+                    *ngFor="let s of _startPointsA; let i = index"
+                    [color]="i % 2 ? 'medium' : 'light'"
+                  >
+                    S{{ i + 1 }}: <strong style="margin-left: 1em;">{{ s }}</strong>
+                  </ion-item>
+                </ion-list>
+
+                <ion-list *ngIf="!toggleBars">
+                  <ion-item
+                    *ngFor="let s of _startPointsB; let i = index"
+                    [color]="i % 2 ? 'medium' : 'light'"
+                  >
+                    S{{ i + 1 }}: <strong style="margin-left: 1em;">{{ s }}</strong>
+                  </ion-item>
+                </ion-list>
+              </ion-card-content>
+            </ion-card>
+
+          </div>
+
+        </div>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="stairSegment">
+      <ion-segment-button value="calc">Gate</ion-segment-button>
+      <ion-segment-button value="bar">Bar</ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-footer>
